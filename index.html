@@ -1,19 +1,37 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Hello World!</title>
-  </head>
-  <body>
-    <h1>Hello World!</h1>
-    <!-- All of the Node.js APIs are available in this renderer process. -->
-    We are using Node.js <script>document.write(process.versions.node)</script>,
-    Chromium <script>document.write(process.versions.chrome)</script>,
-    and Electron <script>document.write(process.versions.electron)</script>
-  </body>
 
-  <script>
-    // You can also require other files to run in this process
-    require('./dist/renderer.js')
-  </script>
+<head>
+  <meta charset="UTF-8">
+  <title>PhysioSE</title>
+  <link rel="stylesheet" href="node_modules/xel/stylesheets/macos.theme.css">
+  <link rel="stylesheet" href="styles/custom.css">
+  <script src="node_modules/xel/xel.min.js"></script>
+  <script src="dist/subject.js"></script>
+</head>
+
+<body>
+  <div class="content">
+    <div>
+      <form>
+        <x-input id="subjectID">
+          <x-icon name="receipt"></x-icon>
+          <x-label>Student ID</x-label>
+        </x-input>
+        <x-button onclick="createSubject()">
+          <x-label>Continue</x-label>
+        </x-button>
+      </form>
+    </div>
+  </div>
+</body>
+
+<script>
+  // You can also require other files to run in this process
+  const form = document.querySelector('form');
+  form.addEventListener('submit', createSubject);
+
+  require('./dist/renderer.js');
+</script>
+
 </html>
