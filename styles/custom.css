@@ -1,0 +1,14 @@
+.content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background-color: #227ec9;
+  height: 100%;
+}
+body {
+  height: 100vh;
+}
+x-button {
+  width: 100%;
+}
