@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # electron-quick-start-typscript
 
 **Clone and run for a quick way to see Electron in action.**
@@ -43,3 +44,7 @@ Note: If you're using Linux Bash for Windows, [see this guide](https://www.howto
 ## License
 
 [CC0 1.0 (Public Domain)](LICENSE.md)
+=======
+# Psycode
+A small utility to administer psycho-physiological tests to software developers
+>>>>>>> 8879af184770213f6a1f951251802c4fa565507f
