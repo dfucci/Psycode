@@ -15,7 +15,6 @@ function createSubject(e: any): void {
   e.preventDefault();
   const id = document.querySelector('#subjectID') as HTMLInputElement;
   const s = new Subject(id.value);
-  console.log('the subject');
   console.log(s);
   ipcRenderer.send('subject:create', s);
 }
