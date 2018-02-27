@@ -30,3 +30,7 @@ button {
     calc(var(--accent-color-l) - 12%)
   );
 }
+img {
+  width: 99%; /* you can use % */
+  height: auto;
+}

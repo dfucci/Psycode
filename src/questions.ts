@@ -1,4 +1,5 @@
-// tslint:disable-next-line:no-var-requires
+// tslint:disable:no-var-requires
+const fs = require('fs');
 const path = require('path');
 const BrowserWindow = electron.remote.BrowserWindow;
 enum questionsType {
@@ -21,13 +22,36 @@ class Question {
     this.correctAnswer = correctAnswer;
     this.type = type;
   }
+  public getQuestionImage() {
+    return this.questionImage;
+  }
+}
+
+function createQuestionsSequence(): Question[] {
+  console.log('create seq');
+  const questionFolder = './assets/questions/review';
+  const questions: Question[] = [];
+  fs
+    .readdirSync(questionFolder)
+    .sort(() => 0.5 - Math.random())
+    .slice(0, 10)
+    .forEach((file: any) => {
+      const q = new Question(file, questionsType.Review, true);
+      questions.push(q);
+      console.log(q);
+    });
+  const el = document.querySelector('img');
+  el.setAttribute(
+    'src',
+    `./assets/questions/review/${questions[0].getQuestionImage()}`
+  );
+  return questions;
 }
 
 function createQuestionWindow(e: any): void {
   e.preventDefault();
   const carousel = path.join('file://', __dirname, 'carousel.html');
-  let win = new BrowserWindow({ width: 400, height: 400 });
+  let win = new BrowserWindow({ width: 500, height: 500 });
   win.on('close', () => (win = null));
   win.loadURL(carousel);
-  win.show();
 }
