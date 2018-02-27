@@ -26,6 +26,19 @@ class Question {
     return this.questionImage;
   }
 }
+function startCarousel(): void {
+  const questions: Question[] = this.createQuestionsSequence();
+  const el = document.querySelector('img');
+  questions.forEach((obj: Question, index: number) => {
+    const timer = setTimeout(() => {
+      console.log('foobar');
+      el.setAttribute(
+        'src',
+        `./assets/questions/review/${obj.getQuestionImage()}`
+      );
+    }, index * 2000);
+  });
+}
 
 function createQuestionsSequence(): Question[] {
   console.log('create seq');
@@ -40,11 +53,6 @@ function createQuestionsSequence(): Question[] {
       questions.push(q);
       console.log(q);
     });
-  const el = document.querySelector('img');
-  el.setAttribute(
-    'src',
-    `./assets/questions/review/${questions[0].getQuestionImage()}`
-  );
   return questions;
 }
 
