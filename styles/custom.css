@@ -10,6 +10,12 @@ body {
   height: 100vh;
 }
 
+#buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
 button {
   width: 100%;
   min-height: 24px;

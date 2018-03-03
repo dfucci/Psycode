@@ -16,22 +16,26 @@
 <body>
     <div id="question">
         <img src="" alt="">
-        <x-button>
-            <x-box>
-                <x-label>Button</x-label>
-                <x-icon name='security'></x-icon>
-            </x-box>
-        </x-button>
-        <x-button>
-            <x-box>
-                <x-label>Button</x-label>
-                <x-icon name='security'></x-icon>
-            </x-box>
-        </x-button>
+        <div id="buttons">
+            <x-button>
+                <x-box vertical>
+                    <x-label id="yes">Accept</x-label>
+                    <x-icon name='thumb-up'></x-icon>
+                </x-box>
+            </x-button>
+            <x-button>
+                <x-box vertical>
+                    <x-label id="no">Decline</x-label>
+                    <x-icon name='thumb-down'></x-icon>
+                </x-box>
+            </x-button>
+        </div>
     </div>
 </body>
 <script>
     window.onload = startCarousel();
+    const btn = document.getElementById('yes');
+    btn.addEventListener('click', nextQuestion);
 </script>
 
 </html>

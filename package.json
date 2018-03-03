@@ -8,7 +8,10 @@
     "start": "npm run build && electron ./dist/main.js"
   },
   "repository": "https://github.com/dfucci/Psycode",
-  "keywords": ["Electron", "typescript"],
+  "keywords": [
+    "Electron",
+    "typescript"
+  ],
   "author": "Davide Fucci",
   "license": "Apache-2.0",
   "devDependencies": {
@@ -19,6 +22,7 @@
     "typescript": "^2.6.2"
   },
   "dependencies": {
+    "@types/es6-promise": "^3.3.0",
     "xel": "0.0.122"
   }
 }
