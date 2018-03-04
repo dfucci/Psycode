@@ -9,8 +9,11 @@
 body {
   height: 100vh;
 }
-
+#questions {
+  display: flex;
+}
 #buttons {
+  align-self: flex-end;
   display: flex;
   flex-direction: row;
   justify-content: space-around;

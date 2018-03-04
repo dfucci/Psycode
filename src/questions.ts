@@ -1,61 +1,74 @@
 const fs = require('fs');
 const path = require('path');
 const BrowserWindow = electron.remote.BrowserWindow;
+
 class Question {
   private correctAnswer: boolean;
   private answer: boolean;
   private questionImage: string;
   private type: string;
 
-  constructor(questionImage: string, type: string, correctAnswer: boolean) {
+  constructor(
+    questionImage: string,
+    type: string,
+    correctAnswer: boolean = true
+  ) {
     this.questionImage = questionImage;
     this.correctAnswer = correctAnswer;
     this.type = type;
   }
-  public getQuestionImage() {
+  public getImage() {
     return this.questionImage;
+  }
+
+  public getType() {
+    return this.type;
   }
 }
 
-let timeHandle: number;
-let restartTimeout: number;
+const timeouts: { [key: string]: () => number } = {
+  review: () => 10000,
+  prose: () => 5000,
+  fixation: () => 1000 * Math.floor(Math.random() * 6) + 2
+};
+
+let timeHandle: any;
 let questions: Question[] = this.createQuestions();
 function startCarousel(): void {
+  clearTimeout(timeHandle);
   function nextPicture(qs: Question[]) {
     const picture = qs.shift();
     if (picture) {
       replaceImage(picture);
-      this.timeHandle = setTimeout(() => nextPicture(qs), 5000);
-    } else {
-      const el = document.querySelector('img');
-      el.setAttribute('src', './assets/questions/fixation.jpg');
-      const btnDiv = document.getElementById('buttons');
-      btnDiv.style.visibility = 'hidden';
-      this.restartTimeout = setTimeout(
-        restart,
-        1000 * Math.floor(Math.random() * 6) + 2
-      );
+      const type = picture.getType();
+      timeHandle = setTimeout(() => nextPicture(qs), timeouts[type]());
+      console.log('replace image');
+      console.log(timeHandle);
     }
   }
   nextPicture(questions);
 }
-function restart() {
-  console.log('restarting');
-  clearTimeout(this.restartTimeout);
-  const btnDiv = document.getElementById('buttons');
-  btnDiv.style.visibility = 'visible';
-  this.questions = this.createQuestions();
-  startCarousel();
-}
+
 function nextQuestion() {
   console.log('nextQuestion');
-  clearTimeout(this.timeHandle);
+  clearTimeout(timeHandle);
+  console.log(timeHandle);
   startCarousel();
 }
 
 function replaceImage(obj: Question) {
+  const div = document.getElementById('buttons');
   const el = document.querySelector('img');
-  el.setAttribute('src', `./assets/questions/review/${obj.getQuestionImage()}`);
+  if (obj.getType() === 'fixation') {
+    div.style.visibility = 'hidden';
+  } else {
+    div.style.visibility = 'visible';
+  }
+
+  el.setAttribute(
+    'src',
+    `./assets/questions/${obj.getType()}/${obj.getImage()}`
+  );
 }
 
 function createQuestions(): Question[] {
@@ -64,23 +77,54 @@ function createQuestions(): Question[] {
     const questionArray: Question[] = [];
     fs
       .readdirSync(questionFolder)
-      .sort(() => 0.5 - Math.random())
-      .slice(0, 10)
+      // .sort(() => 0.5 - Math.random())
+      // .slice(0, 10)
       .forEach((file: any) => {
-        const q = new Question(file, type, true);
+        const q = new Question(file, type);
         questionArray.push(q);
       });
     return questionArray;
   }
   const qReview = createQuestionOfType('review');
   const qProse = createQuestionOfType('prose');
-  return qReview;
+  const block1: Question[] = qReview
+    .splice(0, 3)
+    .concat(qProse.splice(0, 6))
+    .sort(() => 0.5 - Math.random());
+
+  const block2: Question[] = qReview
+    .splice(0, 3)
+    .concat(qProse.splice(0, 6))
+    .sort(() => 0.5 - Math.random());
+
+  const block3: Question[] = qReview
+    .splice(0, 3)
+    .concat(qProse.splice(0, 6))
+    .sort(() => 0.5 - Math.random());
+
+  const block4: Question[] = qReview
+    .splice(0, 3)
+    .concat(qProse.splice(0, 6))
+    .sort(() => 0.5 - Math.random());
+
+  const fixation = new Question('fixation.jpg', 'fixation');
+  const out: Question[] = block1.concat(
+    fixation,
+    block2,
+    fixation,
+    block3,
+    fixation,
+    block4
+  );
+  console.log(out);
+
+  return out;
 }
 
 function createQuestionWindow(e: any): void {
   e.preventDefault();
   const carousel = path.join('file://', __dirname, 'carousel.html');
-  let win = new BrowserWindow({ width: 500, height: 500 });
+  let win = new BrowserWindow({ width: 800, height: 800 });
   win.on('close', () => (win = null));
   win.loadURL(carousel);
 }

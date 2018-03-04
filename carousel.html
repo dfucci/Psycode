@@ -17,15 +17,15 @@
     <div id="question">
         <img src="" alt="">
         <div id="buttons">
-            <x-button>
+            <x-button id="yes">
                 <x-box vertical>
-                    <x-label id="yes">Accept</x-label>
+                    <x-label>Accept</x-label>
                     <x-icon name='thumb-up'></x-icon>
                 </x-box>
             </x-button>
-            <x-button>
+            <x-button id="no">
                 <x-box vertical>
-                    <x-label id="no">Decline</x-label>
+                    <x-label>Decline</x-label>
                     <x-icon name='thumb-down'></x-icon>
                 </x-box>
             </x-button>
@@ -34,8 +34,11 @@
 </body>
 <script>
     window.onload = startCarousel();
-    const btn = document.getElementById('yes');
-    btn.addEventListener('click', nextQuestion);
+    const yes = document.getElementById('yes');
+    yes.addEventListener('click', nextQuestion);
+
+    const no = document.getElementById('no');
+    no.addEventListener('click', nextQuestion);
 </script>
 
 </html>

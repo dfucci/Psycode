@@ -8,8 +8,8 @@ let mainWindow: Electron.BrowserWindow;
 function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    height: 600,
-    width: 800
+    height: 300,
+    width: 400
   });
 
   // and load the index.html of the app.
@@ -22,7 +22,7 @@ function createWindow() {
   );
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 
   // Emitted when the window is closed.
   mainWindow.on('closed', () => {
