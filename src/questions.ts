@@ -35,13 +35,29 @@ const timeouts: { [key: string]: () => number } = {
 let timeHandle: any;
 let questions: Question[] = this.createQuestions();
 function startCarousel(): void {
-  clearTimeout(timeHandle);
   function nextPicture(qs: Question[]) {
+    clearTimeout(timeHandle);
     const picture = qs.shift();
     if (picture) {
       replaceImage(picture);
       const type = picture.getType();
+      let timeleft = timeouts[type]();
       timeHandle = setTimeout(() => nextPicture(qs), timeouts[type]());
+      const countdown = setInterval(() => {
+        if (type !== 'fixation') {
+          timeleft = timeleft - 1000;
+          if (timeleft <= 3000) {
+            console.log(timeleft);
+            document.getElementById('countdown').textContent = String(
+              timeleft / 1000
+            );
+          }
+          if (timeleft <= 0) {
+            document.getElementById('countdown').textContent = '';
+            clearInterval(countdown);
+          }
+        }
+      }, 1000);
       console.log('replace image');
       console.log(timeHandle);
     }
@@ -50,10 +66,7 @@ function startCarousel(): void {
 }
 
 function nextQuestion() {
-  console.log('nextQuestion');
-  clearTimeout(timeHandle);
-  console.log(timeHandle);
-  startCarousel();
+  console.log('hide button');
 }
 
 function replaceImage(obj: Question) {

@@ -12,6 +12,10 @@ body {
 #questions {
   display: flex;
 }
+#countdown {
+  font-size: 2.3rem;
+  font-weight: bold;
+}
 #buttons {
   align-self: flex-end;
   display: flex;
