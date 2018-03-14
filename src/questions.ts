@@ -65,7 +65,9 @@ function startCarousel(): void {
   nextPicture(questions);
 }
 
-function nextQuestion() {
+function nextQuestion(e: any) {
+  console.log(e);
+
   console.log('hide button');
 }
 
