@@ -16,4 +16,5 @@ function createSubject(e: any): void {
   const id = document.querySelector('#subjectID') as HTMLInputElement;
   const s = new Subject(id.value);
   ipcRenderer.send('subject:create', s);
+  localStorage.setItem('subject', id.value);
 }

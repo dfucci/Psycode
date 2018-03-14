@@ -35,28 +35,16 @@
 </body>
 <script>
     window.onload = startCarousel();
-    const yes = document.getElementById('yes');
-    yes.addEventListener('click', nextQuestion);
+    // const yes = document.getElementById('yes');
+    // yes.addEventListener('click', nextQuestion);
 
-    const no = document.getElementById('no');
-    no.addEventListener('click', nextQuestion);
+    // const no = document.getElementById('no');
+    // no.addEventListener('click', nextQuestion);
 
     window.addEventListener('keyup', (e) => {
         console.log(e);
-        if (e.keyCode = 37) {
-            yes.dispatchEvent(new MouseEvent('click', {
-                view: window,
-                bubbles: true,
-                cancelable: true
-            }));
-        }
-        if (e.keyCode = 39) {
-            no.dispatchEvent(new MouseEvent('click', {
-                view: window,
-                bubbles: true,
-                cancelable: true
-            })
-            )
+        if (e.keyCode == 37 || e.keyCode == 39) {
+            nextQuestion(e);
         }
     }, true)
 </script>

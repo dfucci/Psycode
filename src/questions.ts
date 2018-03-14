@@ -1,7 +1,15 @@
 const fs = require('fs');
 const path = require('path');
-const BrowserWindow = electron.remote.BrowserWindow;
 
+const BrowserWindow = electron.remote.BrowserWindow;
+interface IAnswer {
+  timestamp: number;
+  value: string;
+  rank: number;
+  subject: string;
+  question: string;
+}
+let answers: IAnswer[] = [];
 class Question {
   private correctAnswer: boolean;
   private answer: boolean;
@@ -67,8 +75,21 @@ function startCarousel(): void {
 
 function nextQuestion(e: any) {
   console.log(e);
-
-  console.log('hide button');
+  let answer: IAnswer;
+  answer = {
+    question: document
+      .getElementById('question')
+      .children[0].getAttribute('src')
+      .split('/')[4]
+      .split('.')[0],
+    timestamp: new Date().getTime(),
+    value: e.which,
+    rank: answers.length,
+    subject: localStorage.getItem('subject')
+  };
+  console.log(answer);
+  answers.push(answer);
+  console.log(answers);
 }
 
 function replaceImage(obj: Question) {
