@@ -33,7 +33,7 @@ function createWindow() {
   });
 }
 ipcMain.on('subject:create', (e: any, subject: any) => {
-  fs.writeFileSync('./data.json', JSON.stringify(subject), 'utf-8');
+  // fs.writeFileSync('./data.json', JSON.stringify(subject), 'utf-8');
 });
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
