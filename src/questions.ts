@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
-
 const BrowserWindow = electron.remote.BrowserWindow;
+
 interface IAnswer {
   timestamp: number;
   value: string;
@@ -9,7 +9,6 @@ interface IAnswer {
   subject: string;
   question: string;
 }
-let answers: IAnswer[] = [];
 class Question {
   private correctAnswer: boolean;
   private answer: boolean;
@@ -34,20 +33,22 @@ class Question {
   }
 }
 
+let timeHandle: any;
+let questions: Question[] = this.createQuestionsSequence();
+let answers: IAnswer[] = [];
 const timeouts: { [key: string]: () => number } = {
-  review: () => 10000,
+  fixation: () => 1000 * Math.floor(Math.random() * 6) + 2,
   prose: () => 5000,
-  fixation: () => 1000 * Math.floor(Math.random() * 6) + 2
+  review: () => 10000
 };
 
-let timeHandle: any;
-let questions: Question[] = this.createQuestions();
 function startCarousel(): void {
   function nextPicture(qs: Question[]) {
     clearTimeout(timeHandle);
     const picture = qs.shift();
     if (picture) {
       replaceImage(picture);
+      toggleButtons(picture);
       const type = picture.getType();
       let timeleft = timeouts[type]();
       timeHandle = setTimeout(() => nextPicture(qs), timeouts[type]());
@@ -82,43 +83,37 @@ function nextQuestion(e: any) {
       .children[0].getAttribute('src')
       .split('/')[4]
       .split('.')[0],
-    timestamp: new Date().getTime(),
-    value: e.which,
     rank: answers.length,
-    subject: localStorage.getItem('subject')
+    subject: localStorage.getItem('subject'),
+    timestamp: new Date().getTime(),
+    value: e.which
   };
-  console.log(answer);
   answers.push(answer);
-  console.log(answers);
 }
 
 function replaceImage(obj: Question) {
-  const div = document.getElementById('buttons');
   const el = document.querySelector('img');
-  if (obj.getType() === 'fixation') {
-    div.style.visibility = 'hidden';
-  } else {
-    div.style.visibility = 'visible';
-  }
-
   el.setAttribute(
     'src',
     `./assets/questions/${obj.getType()}/${obj.getImage()}`
   );
 }
 
-function createQuestions(): Question[] {
+function toggleButtons(obj: Question) {
+  const buttons = document.getElementById('buttons');
+  obj.getType() === 'fixation'
+    ? (buttons.style.visibility = 'hidden')
+    : (buttons.style.visibility = 'visible');
+}
+
+function createQuestionsSequence(): Question[] {
   function createQuestionOfType(type: string): Question[] {
     const questionFolder = `./assets/questions/${type}`;
     const questionArray: Question[] = [];
-    fs
-      .readdirSync(questionFolder)
-      // .sort(() => 0.5 - Math.random())
-      // .slice(0, 10)
-      .forEach((file: any) => {
-        const q = new Question(file, type);
-        questionArray.push(q);
-      });
+    fs.readdirSync(questionFolder).forEach((file: any) => {
+      const q = new Question(file, type);
+      questionArray.push(q);
+    });
     return questionArray;
   }
   const qReview = createQuestionOfType('review');
@@ -152,8 +147,6 @@ function createQuestions(): Question[] {
     fixation,
     block4
   );
-  console.log(out);
-
   return out;
 }
 
