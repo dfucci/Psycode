@@ -2,7 +2,12 @@ const fs = require('fs');
 const path = require('path');
 const json2csv = require('json2csv').parse;
 const BrowserWindow = electron.remote.BrowserWindow;
-window.onload = startCarousel();
+
+let questions: Question[];
+window.onload = () => {
+  questions = createQuestionsSequence();
+  startCarousel();
+};
 window.addEventListener('keyup', handleKeyPress, true);
 function handleKeyPress(e: any) {
   if (e.keyCode === 37 || e.keyCode === 39) {
@@ -42,7 +47,6 @@ class Question {
 }
 
 let timeHandle: any;
-let questions: Question[] = this.createQuestionsSequence();
 let answers: IAnswer[] = [];
 const timeouts: { [key: string]: () => number } = {
   fixation: () => 1000 * Math.floor(Math.random() * 6) + 2,
@@ -51,6 +55,8 @@ const timeouts: { [key: string]: () => number } = {
 };
 
 function startCarousel(): any {
+  console.log(questions);
+
   function nextPicture(qs: Question[]) {
     clearTimeout(timeHandle);
     const picture = qs.shift();
