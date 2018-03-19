@@ -1,7 +1,15 @@
 const fs = require('fs');
 const path = require('path');
+const json2csv = require('json2csv').parse;
 const BrowserWindow = electron.remote.BrowserWindow;
-
+window.onload = startCarousel();
+window.addEventListener('keyup', handleKeyPress, true);
+function handleKeyPress(e: any) {
+  if (e.keyCode === 37 || e.keyCode === 39) {
+    answerQuestion(e);
+    window.removeEventListener('keyup', handleKeyPress, true);
+  }
+}
 interface IAnswer {
   timestamp: number;
   value: string;
@@ -42,7 +50,7 @@ const timeouts: { [key: string]: () => number } = {
   review: () => 10000
 };
 
-function startCarousel(): void {
+function startCarousel(): any {
   function nextPicture(qs: Question[]) {
     clearTimeout(timeHandle);
     const picture = qs.shift();
@@ -56,7 +64,6 @@ function startCarousel(): void {
         if (type !== 'fixation') {
           timeleft = timeleft - 1000;
           if (timeleft <= 3000) {
-            console.log(timeleft);
             document.getElementById('countdown').textContent = String(
               timeleft / 1000
             );
@@ -67,15 +74,15 @@ function startCarousel(): void {
           }
         }
       }, 1000);
-      console.log('replace image');
-      console.log(timeHandle);
+    } else {
+      const csvAnswers = json2csv(answers);
+      console.log(csvAnswers);
     }
   }
   nextPicture(questions);
 }
 
-function nextQuestion(e: any) {
-  console.log(e);
+function answerQuestion(e: any) {
   let answer: IAnswer;
   answer = {
     question: document
@@ -86,7 +93,7 @@ function nextQuestion(e: any) {
     rank: answers.length,
     subject: localStorage.getItem('subject'),
     timestamp: new Date().getTime(),
-    value: e.which
+    value: e.which === 37 ? 'Accept' : 'Reject'
   };
   answers.push(answer);
 }
