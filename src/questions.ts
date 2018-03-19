@@ -55,12 +55,11 @@ const timeouts: { [key: string]: () => number } = {
 };
 
 function startCarousel(): any {
-  console.log(questions);
-
   function nextPicture(qs: Question[]) {
     clearTimeout(timeHandle);
     const picture = qs.shift();
     if (picture) {
+      window.addEventListener('keyup', handleKeyPress, true);
       replaceImage(picture);
       toggleButtons(picture);
       const type = picture.getType();
