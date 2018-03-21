@@ -1,5 +1,6 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
 import * as fs from 'fs';
+import * as os from 'os';
 import * as path from 'path';
 import * as url from 'url';
 
@@ -32,8 +33,12 @@ function createWindow() {
     mainWindow = null;
   });
 }
-ipcMain.on('subject:create', (e: any, subject: any) => {
-  // fs.writeFileSync('./data.json', JSON.stringify(subject), 'utf-8');
+ipcMain.on('answers:save', (e: any, answers: any) => {
+  fs.writeFileSync(
+    path.join(os.homedir(), `answers_${Date.now()}.csv`),
+    answers,
+    'utf-8'
+  );
 });
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.

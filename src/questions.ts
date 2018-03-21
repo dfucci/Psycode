@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const json2csv = require('json2csv').parse;
 const BrowserWindow = electron.remote.BrowserWindow;
+const remote = require('electron').remote;
 
 let questions: Question[];
 window.onload = () => {
@@ -81,7 +82,8 @@ function startCarousel(): any {
       }, 1000);
     } else {
       const csvAnswers = json2csv(answers);
-      console.log(csvAnswers);
+      ipcRenderer.send('answers:save', csvAnswers);
+      remote.getCurrentWindow().close();
     }
   }
   nextPicture(questions);
@@ -90,10 +92,10 @@ function startCarousel(): any {
 function answerQuestion(e: any) {
   let answer: IAnswer;
   answer = {
-    question: document
-      .getElementById('question')
-      .children[0].getAttribute('src')
-      .split('/')[4]
+    question: path
+      .basename(
+        document.getElementById('question').children[0].getAttribute('src')
+      )
       .split('.')[0],
     rank: answers.length,
     subject: localStorage.getItem('subject'),
@@ -107,7 +109,13 @@ function replaceImage(obj: Question) {
   const el = document.querySelector('img');
   el.setAttribute(
     'src',
-    `./assets/questions/${obj.getType()}/${obj.getImage()}`
+    path.join(
+      'file://',
+      __dirname,
+      'assets/questions/',
+      obj.getType(),
+      obj.getImage()
+    )
   );
 }
 
@@ -120,7 +128,7 @@ function toggleButtons(obj: Question) {
 
 function createQuestionsSequence(): Question[] {
   function createQuestionOfType(type: string): Question[] {
-    const questionFolder = `./assets/questions/${type}`;
+    const questionFolder = path.join(__dirname, '/assets/questions/', type);
     const questionArray: Question[] = [];
     fs.readdirSync(questionFolder).forEach((file: any) => {
       const q = new Question(file, type);
