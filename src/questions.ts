@@ -11,6 +11,7 @@ window.onload = () => {
 };
 window.addEventListener('keyup', handleKeyPress, true);
 function handleKeyPress(e: any) {
+  activeButtons(false);
   if (e.keyCode === 37 || e.keyCode === 39) {
     answerQuestion(e);
     window.removeEventListener('keyup', handleKeyPress, true);
@@ -57,12 +58,15 @@ const timeouts: { [key: string]: () => number } = {
 
 function startCarousel(): any {
   function nextPicture(qs: Question[]) {
+    activeButtons(true);
     clearTimeout(timeHandle);
     const picture = qs.shift();
     if (picture) {
       window.addEventListener('keyup', handleKeyPress, true);
       replaceImage(picture);
-      toggleButtons(picture);
+      if (picture.getType() === 'fixation') {
+        activeButtons(false);
+      }
       const type = picture.getType();
       let timeleft = timeouts[type]();
       timeHandle = setTimeout(() => nextPicture(qs), timeouts[type]());
@@ -119,11 +123,15 @@ function replaceImage(obj: Question) {
   );
 }
 
-function toggleButtons(obj: Question) {
-  const buttons = document.getElementById('buttons');
-  obj.getType() === 'fixation'
-    ? (buttons.style.visibility = 'hidden')
-    : (buttons.style.visibility = 'visible');
+function activeButtons(active: boolean) {
+  const buttons = document.getElementsByClassName('button');
+  if (active) {
+    (buttons[0] as HTMLElement).style.visibility = 'visible';
+    (buttons[1] as HTMLElement).style.visibility = 'visible';
+  } else {
+    (buttons[0] as HTMLElement).style.visibility = 'hidden';
+    (buttons[1] as HTMLElement).style.visibility = 'hidden';
+  }
 }
 
 function createQuestionsSequence(): Question[] {

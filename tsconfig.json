@@ -5,6 +5,7 @@
     "sourceMap": true,
     "outDir": "dist",
     "baseUrl": ".",
+    "lib": ["es6", "dom"],
     "paths": {
       "*": ["node_modules/*"]
     }

@@ -7,6 +7,8 @@ import * as url from 'url';
 let mainWindow: Electron.BrowserWindow;
 
 function createWindow() {
+  // console.log(app.getPath('documents'));
+
   // Create the browser window.
   mainWindow = new BrowserWindow({
     height: 300,
@@ -35,7 +37,7 @@ function createWindow() {
 }
 ipcMain.on('answers:save', (e: any, answers: any) => {
   fs.writeFileSync(
-    path.join(os.homedir(), `answers_${Date.now()}.csv`),
+    path.join(app.getPath('documents'), '/', `answers_${Date.now()}.csv`),
     answers,
     'utf-8'
   );
