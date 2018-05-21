@@ -37,7 +37,7 @@ function createWindow() {
 }
 ipcMain.on('answers:save', (e: any, answers: any) => {
   fs.writeFileSync(
-    path.join(app.getPath('documents'), '/', `answers_${Date.now()}.csv`),
+    path.join(os.homedir(), `/answers_${Date.now()}.csv`),
     answers,
     'utf-8'
   );
