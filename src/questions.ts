@@ -52,8 +52,8 @@ let timeHandle: any;
 let answers: IAnswer[] = [];
 const timeouts: { [key: string]: () => number } = {
   fixation: () => 1000 * Math.floor(Math.random() * 6) + 2,
-  prose: () => 5000,
-  review: () => 10000
+  prose: () => 1000,
+  review: () => 1000,
 };
 
 function startCarousel(): any {
@@ -96,15 +96,11 @@ function startCarousel(): any {
 function answerQuestion(e: any) {
   let answer: IAnswer;
   answer = {
-    question: path
-      .basename(
-        document.getElementById('question').children[0].getAttribute('src')
-      )
-      .split('.')[0],
+    question: path.basename(e.srcElement.childNodes[1].src).split('.')[0],
     rank: answers.length,
     subject: localStorage.getItem('subject'),
     timestamp: new Date().getTime(),
-    value: e.which === 37 ? 'Accept' : 'Reject'
+    value: e.which === 37 ? 'Accept' : 'Reject',
   };
   answers.push(answer);
 }

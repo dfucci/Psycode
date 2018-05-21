@@ -7,12 +7,12 @@ import * as url from 'url';
 let mainWindow: Electron.BrowserWindow;
 
 function createWindow() {
-  // console.log(app.getPath('documents'));
+  console.log(app.getPath('documents'));
 
   // Create the browser window.
   mainWindow = new BrowserWindow({
     height: 300,
-    width: 400
+    width: 400,
   });
 
   // and load the index.html of the app.
@@ -20,7 +20,7 @@ function createWindow() {
     url.format({
       pathname: path.join(__dirname, '../index.html'),
       protocol: 'file:',
-      slashes: true
+      slashes: true,
     })
   );
 
@@ -36,6 +36,7 @@ function createWindow() {
   });
 }
 ipcMain.on('answers:save', (e: any, answers: any) => {
+  console.log('writing file');
   fs.writeFileSync(
     path.join(os.homedir(), `/answers_${Date.now()}.csv`),
     answers,
