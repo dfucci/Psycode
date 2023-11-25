@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@types/es6-promise": "^3.3.0",
-    "json2csv": "^4.0.4",
+    "json2csv": "^4.3.5",
     "xel": "0.0.122"
   }
 }
